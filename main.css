@@ -1,9 +1,11 @@
 /* will be created mobile first */
 :root {
   --text: rgba(0, 0, 0, 0.9);
-  --text-shade: rgba(0, 0, 0, 0.7);
+  --text-shade: rgba(0, 0, 0, 0.5);
   --bg: rgba(255, 255, 255, 0.8);
-  --contrast-color: rgb(239, 71, 111);
+  --contrast-color: #ef476f;
+  --interface-color: #118ab2;
+  --second-shadow-color: #f5ab00;
 }
 
 *,
@@ -21,9 +23,49 @@ html {
 body {
   margin: 0;
   padding: 0;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.header {
+  width: 100vw;
+  padding: 1em 2em;
+  background-color: var(--contrast-color);
+  text-align: center;
+}
+
+/** todo fix position sticky. Check if position:relative is necessary in body */
+
+.title {
+  position: sticky;
+  font-size: 3em;
+  color: white;
+  text-shadow: 2px 2px var(--interface-color),
+    3px 3px var(--second-shadow-color);
+}
+
+.new-todo > * {
+  all: unset;
+  padding: 0.5em;
+  border-radius: 5px;
+}
+
+#new-todo {
+  background-color: white;
+  text-align: left;
+}
+
+#new-todo::placeholder {
+  color: var(--text-shade);
+}
+
+.add-todo {
+  margin-left: 0.5em;
+  background-color: var(--interface-color);
+  box-shadow: 2px 2px var(--second-shadow-color);
+  color: white;
 }
 
 /* tablets and smaller desktops */
