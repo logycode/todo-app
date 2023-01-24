@@ -8,19 +8,71 @@
     <title>My Todos</title>
   </head>
   <body>
-    <header class="header">
-      <h1 class="title">My Todos</h1>
-      <section class="new-todo">
-        <input
-          type="text"
-          name="new-todo"
-          id="new-todo"
-          placeholder="Get sh*t done"
-        />
-        <button class="add-todo">Add</button>
-      </section>
+    <header>
+      <div class="header">
+        <h1 class="title">My Todo App</h1>
+        <section class="new-todo-section">
+          <input
+            type="text"
+            name="new-todo"
+            id="new-todo"
+            placeholder="Get sh*t done"
+          />
+          <button class="add-todo">Add</button>
+        </section>
+      </div>
     </header>
-
+    <main>
+      <section>
+        <h2 class="section-heading">Filter & Options</h2>
+        <div class="filter-selection">
+          <div>
+            <input type="radio" name="filter" id="filter-all" /><label
+              for="filter-all"
+              >All</label
+            >
+          </div>
+          <div>
+            <input type="radio" name="filter" id="filter-open" /><label
+              for="filter-open"
+              >Open</label
+            >
+          </div>
+          <div>
+            <input type="radio" name="filter" id="filter-done" /><label
+              for="filter-done"
+              >Done</label
+            >
+          </div>
+          <button class="remove-todos">Remove done todos</button>
+        </div>
+      </section>
+      <section>
+        <h2 class="section-heading">Your Todos</h2>
+        <div class="todo-list">
+          <div class="todo">
+            <input type="checkbox" name="todo" id="todo-1" /><label for="todo-1"
+              >Todo 1</label
+            >
+          </div>
+          <div class="todo">
+            <input type="checkbox" name="todo" id="todo-2" /><label for="todo-2"
+              >Todo 2</label
+            >
+          </div>
+          <div class="todo">
+            <input type="checkbox" name="todo" id="todo-3" /><label for="todo-3"
+              >Todo 3</label
+            >
+          </div>
+          <div class="todo">
+            <input type="checkbox" name="todo" id="todo-4" /><label for="todo-4"
+              >Todo 4</label
+            >
+          </div>
+        </div>
+      </section>
+    </main>
     <script src="main.js"></script>
   </body>
 </html>

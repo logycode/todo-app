@@ -23,9 +23,9 @@ The list of features is ordered by descending priority.
 Use the following color scheme from [coolors](https://coolors.co/ef476f-f5ab00-06d6a0-118ab2-073b4c). The design additionally uses `#f5f5f5` as the background color and `#ffffff`.
 
 - [ ] Add custom styling to the input elements (checkbox, radio button, button, input)
-- [ ] Use a sans-serif font
-- [ ] Add visible focus states to your inputs
-- [ ] Responsive design is not required but will be appreciated
+- [x] Use a sans-serif font
+- [x] Add visible focus states to your inputs
+- [x] Responsive design is not required but will be appreciated
 
 **Overall Styling**
 

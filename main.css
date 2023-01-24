@@ -1,11 +1,15 @@
 /* will be created mobile first */
+
+/** following styles according to content flow */
+
 :root {
   --text: rgba(0, 0, 0, 0.9);
   --text-shade: rgba(0, 0, 0, 0.5);
-  --bg: rgba(255, 255, 255, 0.8);
+  --bg: #eee;
   --contrast-color: #ef476f;
   --interface-color: #118ab2;
   --second-shadow-color: #f5ab00;
+  --checked: #06d6a0;
 }
 
 *,
@@ -23,30 +27,47 @@ html {
 body {
   margin: 0;
   padding: 0;
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.header {
+header,
+main {
   width: 100vw;
-  padding: 1em 2em;
-  background-color: var(--contrast-color);
+  padding: 1em;
   text-align: center;
+}
+
+header {
+  position: sticky;
+  top: -150px;
+  z-index: 1;
+  background-color: var(--contrast-color);
+}
+
+.header {
+  width: 100%;
 }
 
 /** todo fix position sticky. Check if position:relative is necessary in body */
 
 .title {
-  position: sticky;
+  margin-top: 0;
   font-size: 3em;
   color: white;
   text-shadow: 2px 2px var(--interface-color),
     3px 3px var(--second-shadow-color);
 }
 
-.new-todo > * {
+.new-todo-section {
+  width: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.new-todo-section > * {
   all: unset;
   padding: 0.5em;
   border-radius: 5px;
@@ -62,16 +83,154 @@ body {
 }
 
 .add-todo {
-  margin-left: 0.5em;
   background-color: var(--interface-color);
   box-shadow: 2px 2px var(--second-shadow-color);
   color: white;
 }
 
+main {
+  height: 100vh;
+  background-color: var(--bg);
+}
+
+.filter-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-items: center;
+}
+
+.filter-selection div ~ div {
+  margin-top: 0.5em;
+}
+
+.remove-todos {
+  margin-top: 1.5em;
+  padding: 0.5em;
+  background-color: var(--interface-color);
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px var(--contrast-color);
+  color: white;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-list div {
+  width: 100%;
+  padding: 1em;
+  background-color: white;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.todo-list div ~ div {
+  margin-top: 0.5em;
+}
+
+/** generic styling for components and elements */
+
+input[type="text"]:focus,
+button:focus {
+  outline: 2px solid var(--second-shadow-color);
+  box-shadow: 4px 4px var(--contrast-color);
+}
+
+button {
+  cursor: pointer;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  appearance: unset;
+  margin: 0;
+  width: 1.3em;
+  aspect-ratio: 1;
+  border: 2px solid black;
+  border-radius: 50%;
+  transform: translateY(0.25em);
+}
+
+input[type="checkbox"] {
+  border-radius: 0;
+}
+
+input[type="radio"]:checked {
+  background-color: var(--interface-color);
+}
+
+input[type="radio"]:focus {
+  border: 2px solid var(--second-shadow-color);
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--checked);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' aria-hidden='true' focusable='false' %3E%3Cpath fill='none' stroke='white' stroke-width='3' d='M1.73 12.91l6.37 6.37L22.79 4.59' /%3E%3C/svg%3E");
+}
+
+input[type="checkbox"]:checked ~ label {
+  text-decoration: line-through;
+}
+
+label {
+  margin-left: 0.65em;
+}
+
 /* tablets and smaller desktops */
 @media screen and (min-width: 1024px) {
+  .header {
+    padding: 1em 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  h1 {
+    margin: 0;
+  }
+
+  h2 {
+    text-align: left;
+  }
+
+  .new-todo-section {
+    width: fit-content;
+    padding: 1em;
+  }
+
+  .new-todo-section * ~ * {
+    margin-left: 2em;
+  }
+
+  .filter-selection {
+    width: 30%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /** why still shrinking? */
+
+  .filter-selection div {
+    flex-shrink: 0;
+  }
+
+  .filter-selection div ~ div {
+    margin: 0;
+  }
+
+  .remove-todos {
+    margin: 0;
+  }
 }
 
 /* desktop */
 @media screen and (min-width: 1224px) {
+  .filter-selection div {
+    flex-shrink: 0;
+  }
 }
