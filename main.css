@@ -67,7 +67,7 @@ header {
   justify-content: space-evenly;
 }
 
-.new-todo-section > * {
+form > * {
   all: unset;
   padding: 0.5em;
   border-radius: 5px;
@@ -89,22 +89,31 @@ header {
 }
 
 main {
-  height: 100vh;
+  min-height: 100vh;
   background-color: var(--bg);
 }
 
+section {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
 .filter-selection {
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-items: center;
+  list-style-type: none;
 }
 
-.filter-selection div ~ div {
+.filter-selection li ~ li {
   margin-top: 0.5em;
 }
 
 .remove-todos {
+  width: 100%;
   margin-top: 1.5em;
   padding: 0.5em;
   background-color: var(--interface-color);
@@ -132,6 +141,10 @@ main {
 }
 
 /** generic styling for components and elements */
+
+.invisible {
+  display: none;
+}
 
 input[type="text"]:focus,
 button:focus {
@@ -189,6 +202,9 @@ label {
     align-items: center;
   }
 
+  section {
+    padding-inline: 2em;
+  }
   h1 {
     margin: 0;
   }
@@ -206,31 +222,34 @@ label {
     margin-left: 2em;
   }
 
-  .filter-selection {
-    width: 30%;
+  .filter-wrapper {
+    display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  /** why still shrinking? */
-
-  .filter-selection div {
+    justify-content: space-around;
     flex-shrink: 0;
   }
 
-  .filter-selection div ~ div {
-    margin: 0;
+  /*? why still shrinking? */
+
+  .filter-selection {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
   }
 
+  .filter-selection li ~ li {
+    margin-top: 0;
+  }
+  /*? why is the font-size smaller ? */
   .remove-todos {
     margin: 0;
+    width: 20%;
+    font-size: 1em;
   }
 }
 
 /* desktop */
 @media screen and (min-width: 1224px) {
-  .filter-selection div {
-    flex-shrink: 0;
-  }
 }
