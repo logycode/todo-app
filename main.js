@@ -87,3 +87,35 @@ document.querySelector(".remove-todos").addEventListener("click", () => {
     });
   });
 });
+document
+  .querySelector(".filter-selection")
+  .addEventListener("change", (event) => {
+    const todos = Array.from(document.getElementsByName("todo"));
+    const checkedTodos = todos.filter((todo) => todo.checked === true);
+    const openTodos = todos.filter((todo) => todo.checked === false);
+
+    if (event.target.id === "filter-all") {
+      checkedTodos.forEach((todo) => {
+        todo.parentElement.classList.remove("invisible");
+      });
+      openTodos.forEach((todo) => {
+        todo.parentElement.classList.remove("invisible");
+      });
+    }
+    if (event.target.id === "filter-open") {
+      checkedTodos.forEach((todo) => {
+        todo.parentElement.classList.add("invisible");
+      });
+      openTodos.forEach((todo) => {
+        todo.parentElement.classList.remove("invisible");
+      });
+    }
+    if (event.target.id === "filter-done") {
+      checkedTodos.forEach((todo) => {
+        todo.parentElement.classList.remove("invisible");
+      });
+      openTodos.forEach((todo) => {
+        todo.parentElement.classList.add("invisible");
+      });
+    }
+  });
