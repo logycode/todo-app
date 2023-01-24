@@ -69,3 +69,21 @@ document.addEventListener("submit", addTodo);
 document.addEventListener("keyup", (key) => {
   if (key.code === "Enter") addTodo();
 });
+document.querySelector(".remove-todos").addEventListener("click", () => {
+  const todos = Array.from(document.getElementsByName("todo"));
+
+  if (todos.length === 0) {
+    alert("Du hast noch keine todos angelegt");
+    return false;
+  }
+
+  const checkedTodos = todos.filter((todo) => todo.checked === true);
+  checkedTodos.forEach((todo) => {
+    document.getElementById(todo.id).parentElement.remove();
+    iDs.find((el, i) => {
+      if (el === todo.id) {
+        iDs.splice(i, 1);
+      }
+    });
+  });
+});
