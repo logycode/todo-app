@@ -41,7 +41,7 @@ main {
 
 header {
   position: sticky;
-  top: -150px;
+  top: -110px;
   z-index: 1;
   background-color: var(--contrast-color);
 }
@@ -121,29 +121,51 @@ section {
   border-radius: 5px;
   box-shadow: 2px 2px var(--contrast-color);
   color: white;
+  font-size: 1em;
 }
 
 .todo-list {
+  padding-left: 0;
   display: flex;
   flex-direction: column;
 }
 
-.todo-list div {
-  width: 100%;
+.todo-list li {
+  all: unset;
   padding: 1em;
   background-color: white;
   border-radius: 5px;
   text-align: left;
 }
 
-.todo-list div ~ div {
+.todo-list li ~ li {
   margin-top: 0.5em;
+  list-style-type: none;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin-top: 2em;
+  padding: 1em;
+  background-color: var(--bg);
+  text-align: center;
+  color: white;
 }
 
 /** generic styling for components and elements */
 
 .invisible {
-  display: none;
+  display: none !important;
+}
+
+.success {
+  background-color: var(--checked);
+}
+
+.error {
+  background-color: var(--contrast-color);
 }
 
 input[type="text"]:focus,
