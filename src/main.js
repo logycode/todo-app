@@ -1,3 +1,5 @@
+// todo refactor html to make the whole list entry clickablenpm i serve --save-dev
+
 let todos = [];
 const ul = $("#todo-list");
 const todoInput = $("#todo-description");
