@@ -1,62 +1,52 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="main.css" />
     <title>My Todos</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <header>
-      <div class="header">
-        <h1 class="title">My Todo App</h1>
-        <section class="new-todo-section">
-          <form>
-            <input
-              type="text"
-              name="new-todo"
-              id="new-todo"
-              placeholder="Get sh*t done"
-            />
-            <button class="add-todo">Add</button>
-          </form>
-        </section>
-      </div>
+        <div class="header">
+            <h1 class="title">My Todo App</h1>
+            <section class="new-todo-section">
+                <form>
+                    <input type="text" name="todo-description" id="todo-description" placeholder="Get sh*t done" />
+                    <button class="add-todo" disabled>Add</button>
+                </form>
+            </section>
+            <button class="delete-all">Delete All</button>
+        </div>
     </header>
     <main>
-      <section>
-        <h2 class="section-heading">Filter & Options</h2>
-        <div class="filter-wrapper">
-          <ul class="filter-selection">
-            <li>
-              <input type="radio" name="filter" id="filter-all" checked /><label
-                for="filter-all"
-                >All</label
-              >
-            </li>
-            <li>
-              <input type="radio" name="filter" id="filter-open" /><label
-                for="filter-open"
-                >Open</label
-              >
-            </li>
-            <li>
-              <input type="radio" name="filter" id="filter-done" /><label
-                for="filter-done"
-                >Done</label
-              >
-            </li>
-          </ul>
-          <button class="remove-todos">Remove done todos</button>
-        </div>
-      </section>
-      <section>
-        <h2 class="section-heading">Your Todos</h2>
-        <ul class="todo-list"></ul>
-      </section>
+        <section>
+            <h2 class="section-heading">Filter & Options</h2>
+            <div class="filter-wrapper">
+                <ul class="filter-selection">
+                    <li>
+                        <input type="radio" name="filter" id="filter-all" checked /><label for="filter-all">All</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="filter" id="filter-open" /><label for="filter-open">Open</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="filter" id="filter-done" /><label for="filter-done">Done</label>
+                    </li>
+                </ul>
+                <button class="remove-todos">Remove done todos</button>
+            </div>
+        </section>
+        <section>
+            <h2 class="section-heading">Your Todos</h2>
+            <ul id="todo-list"></ul>
+        </section>
     </main>
     <footer></footer>
     <script src="main.js"></script>
-  </body>
+</body>
+
 </html>

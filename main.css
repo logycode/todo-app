@@ -67,25 +67,33 @@ header {
   justify-content: space-evenly;
 }
 
-form > * {
+form > *,
+.delete-all {
   all: unset;
   padding: 0.5em;
   border-radius: 5px;
 }
 
-#new-todo {
+#todo-description {
   background-color: white;
   text-align: left;
 }
 
-#new-todo::placeholder {
+#todo-description::placeholder {
   color: var(--text-shade);
 }
 
-.add-todo {
+.add-todo,
+.delete-all {
   background-color: var(--interface-color);
   box-shadow: 2px 2px var(--second-shadow-color);
   color: white;
+}
+
+.add-todo:disabled {
+  cursor: default;
+  background-color: gray;
+  color: lightgray;
 }
 
 main {
@@ -124,13 +132,13 @@ section {
   font-size: 1em;
 }
 
-.todo-list {
+#todo-list {
   padding-left: 0;
   display: flex;
   flex-direction: column;
 }
 
-.todo-list li {
+#todo-list li {
   all: unset;
   padding: 1em;
   background-color: white;
@@ -138,7 +146,7 @@ section {
   text-align: left;
 }
 
-.todo-list li ~ li {
+#todo-list li ~ li {
   margin-top: 0.5em;
   list-style-type: none;
 }

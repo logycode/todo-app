@@ -1,198 +1,197 @@
-const state = {
-  todos: [],
-  iDs: [],
+let todos = [];
+const ul = $("#todo-list");
+const todoInput = $("#todo-description");
+const addButton = $(".add-todo");
+const deleteAllButton = $(".delete-all");
+const deleteDoneButton = $(".remove-todos");
+const filterSelection = $(".filter-selection");
+
+// ** helper functions ** //
+
+function $(element) {
+  return document.querySelector(element);
+}
+function $$(element) {
+  return document.getElementById(element);
+}
+function userFeedback(messageType) {
+  if (messageType === "duplicate")
+    return "Du hast schon eine identische Aufgabe eingetragen";
+}
+const normalizedString = (string) => {
+  return string.replaceAll(" ", "").toLocaleLowerCase();
+};
+const isDuplicate = (todo) => {
+  for (todoItem of todos) {
+    if (
+      normalizedString(todoItem.description) ===
+      normalizedString(todo.description)
+    ) {
+      return true;
+    }
+  }
+  return false;
 };
 
-//******** HELPER FUNCTIONS ********
+// ** data related functions ** //
 
-function $(qS) {
-  return document.querySelector(qS);
+async function fetchTodos() {
+  await fetch("http://localhost:4730/todos")
+    .then((response) => response.json())
+    .then((data) => {
+      todos = data;
+    });
 }
-function $$(id) {
-  return document.getElementById(id);
-}
-function createID(existingIDs) {
-  let id = "#";
-  while (id.length < 5) {
-    id += Math.floor(Math.random() * 9);
-  }
-  const exist = existingIDs.find((el) => el === id);
-  if (exist === undefined) {
-    state.iDs.push(id);
-    return id;
-  } else {
-    createID(existingIDs);
-  }
-}
-function responseHandler(response) {
-  const footer = $("footer");
-  let msg = "";
 
-  if (response === "success") {
-    msg = "Daten wurden erfolgreich gespeichert";
-
-    footer.innerText = msg;
-    footer.classList.add("success");
-
-    setTimeout(() => {
-      footer.innerText = "";
-      footer.classList.remove("success");
-    }, 2000);
-
-    return "success";
-  }
-  if (response === "empty") {
-    msg = "Keine Daten vorhanden";
-
-    footer.innerText = msg;
-    footer.classList.add("error");
-
-    setTimeout(() => {
-      footer.innerText = "";
-      footer.classList.remove("error");
-    }, 2000);
-
-    return "storage empty";
-  }
-}
-function validation(input) {
-  if (input.length < 5) {
-    alert("Bitte gib einen längeren Namen ein");
+async function addTodo(todo) {
+  if (isDuplicate(todo)) {
+    userFeedback("duplicate");
     return false;
   }
-  return true;
-}
-//***********************************
 
-function updateLocalStorage() {
-  Object.keys(state).forEach((key) => {
-    localStorage.setItem(key, JSON.stringify(state[key]));
-  });
-  return console.info(responseHandler("success"));
+  await fetch("http://localhost:4730/todos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(todo),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      todos.push(data);
+    });
 }
-function loadStorageData() {
-  if (localStorage.length === 0) {
-    console.warn(responseHandler("empty"));
-    return [];
-  }
-  const todos = JSON.parse(localStorage.getItem("todos"));
-  return todos;
-}
-function buildTodoComponent(todoData) {
-  const li = document.createElement("li");
-  const checkbox = document.createElement("input");
-  const label = document.createElement("label");
-  const todoDescription = document.createTextNode(todoData.description);
 
-  checkbox.type = "checkbox";
-  checkbox.name = "todo";
-  checkbox.id = todoData.id;
-  $(".todo-list").appendChild(li);
-  li.appendChild(checkbox);
-  li.appendChild(label);
-  li.classList.add("todo");
-  label.setAttribute("for", todoData.id);
-  label.appendChild(todoDescription);
+// ** render function ** //
 
-  checkbox.checked = todoData.done;
-  return li;
-}
 function render() {
-  $(".todo-list").innerHTML = "";
-  state.todos.forEach((todo) => {
-    $(".todo-list").insertBefore(
-      buildTodoComponent(todo),
-      $(".todo-list").childNodes[0]
+  ul.innerHTML = "";
+  todoInput.value = "";
+
+  todos.forEach((todo) => {
+    const li = document.createElement("li");
+    const checkbox = document.createElement("input");
+    const label = document.createElement("label");
+    const todoContent = document.createTextNode(todo.description);
+    li.appendChild(checkbox);
+    li.appendChild(label);
+    label.appendChild(todoContent);
+    ul.appendChild(li);
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("id", todo.id);
+    label.setAttribute("for", todo.id);
+    if (todo.done) checkbox.setAttribute("checked", "");
+  });
+
+  todoInput.focus();
+}
+
+// ** event listeners ** //
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await fetchTodos();
+  render();
+  $$("filter-all").setAttribute("checked", "");
+});
+
+todoInput.addEventListener("keyup", () => {
+  if (todoInput.value.length > 0) {
+    addButton.removeAttribute("disabled", "");
+  } else {
+    addButton.setAttribute("disabled", "");
+  }
+});
+
+addButton.addEventListener("click", async (event) => {
+  event.preventDefault();
+  const todo = {
+    description: todoInput.value,
+    done: false,
+  };
+  await addTodo(todo);
+  render();
+});
+
+deleteAllButton.addEventListener("click", () => {
+  const fetches = [];
+
+  todos.forEach((todoItem) => {
+    fetches.push(
+      fetch(`http://localhost:4730/todos/${todoItem.id}`, {
+        method: "DELETE",
+      })
     );
   });
-}
-function addTodo(event) {
-  event.preventDefault();
-
-  const todo = $$("new-todo").value;
-
-  if (!validation(todo)) return false;
-
-  const currentId = createID(state.iDs);
-  state.todos.push({
-    id: currentId,
-    description: todo,
-    done: false,
+  Promise.all(fetches).then(() => {
+    todos = [];
+    render();
   });
-
-  updateLocalStorage();
-  render();
-
-  $$("new-todo").focus();
-}
-
-state.todos = loadStorageData();
-
-//************ EVENT LISTENERS ************/
-
-document.addEventListener("DOMContentLoaded", render);
-document.addEventListener("submit", (event) => {
-  addTodo(event);
-  event.target.reset();
 });
-$("input").addEventListener("keydown", (event) => {
-  if (event.code === "Enter") {
-    addTodo(event);
-    event.target.parentElement.reset();
-  }
+
+ul.addEventListener("change", (event) => {
+  fetch(`http://localhost:4730/todos/${event.target.id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      done: event.target.checked,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const currentTodo = todos.find((item) => item.id === data.id);
+      currentTodo.done = !currentTodo.done;
+    });
 });
-$(".todo-list").addEventListener("change", (event) => {
-  state.todos.find((el) => {
-    if (el.id === event.target.id) {
-      el.done = true;
+
+deleteDoneButton.addEventListener("click", () => {
+  // todo filter needs to be reset when done tasks are deleted
+
+  const fetches = [];
+
+  todos.forEach((todoItem) => {
+    if (todoItem.done === true) {
+      fetches.push(
+        fetch(`http://localhost:4730/todos/${todoItem.id}`, {
+          method: "DELETE",
+        })
+      );
     }
   });
 
-  updateLocalStorage();
-  state.todos = loadStorageData();
+  Promise.all(fetches).then(async () => {
+    await fetchTodos();
+    render();
+  });
 });
-$(".remove-todos").addEventListener("click", () => {
-  const doneTodos = state.todos.filter((todo) => todo.done === true);
-  if (doneTodos.length === 0) return console.warn(responseHandler("empty"));
-  for (let i = state.todos.length - 1; i >= 0; i--) {
-    if (state.todos[i].done === true) {
-      state.todos.splice(i, 1);
-    }
-  }
-  updateLocalStorage();
-  render();
-});
-$(".filter-selection").addEventListener("change", (event) => {
-  const todos = state.todos;
-  const doneTodos = todos.filter((todo) => todo.done === true);
-  const openTodos = todos.filter((todo) => todo.done === false);
 
-  console.log("all:", todos);
-  console.log("done:", doneTodos);
-  console.log("open:", openTodos);
+filterSelection.addEventListener("change", (event) => {
+  const doneTodos = todos.filter((todoItem) => todoItem.done === true);
+  const openTodos = todos.filter((todoItem) => todoItem.done === false);
 
   if (event.target.id === "filter-all") {
-    doneTodos.forEach((todo) => {
-      $$(todo.id).parentElement.classList.remove("invisible");
+    doneTodos.forEach((todoItem) => {
+      $$(todoItem.id).parentElement.classList.remove("invisible");
     });
-    openTodos.forEach((todo) => {
-      $$(todo.id).parentElement.classList.remove("invisible");
+    openTodos.forEach((todoItem) => {
+      $$(todoItem.id).parentElement.classList.remove("invisible");
     });
   }
   if (event.target.id === "filter-open") {
-    doneTodos.forEach((todo) => {
-      $$(todo.id).parentElement.classList.add("invisible");
+    doneTodos.forEach((todoItem) => {
+      $$(todoItem.id).parentElement.classList.add("invisible");
     });
-    openTodos.forEach((todo) => {
-      $$(todo.id).parentElement.classList.remove("invisible");
+    openTodos.forEach((todoItem) => {
+      $$(todoItem.id).parentElement.classList.remove("invisible");
     });
   }
   if (event.target.id === "filter-done") {
-    doneTodos.forEach((todo) => {
-      $$(todo.id).parentElement.classList.remove("invisible");
+    doneTodos.forEach((todoItem) => {
+      $$(todoItem.id).parentElement.classList.remove("invisible");
     });
-    openTodos.forEach((todo) => {
-      $$(todo.id).parentElement.classList.add("invisible");
+    openTodos.forEach((todoItem) => {
+      $$(todoItem.id).parentElement.classList.add("invisible");
     });
   }
 });
